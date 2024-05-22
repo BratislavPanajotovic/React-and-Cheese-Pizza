@@ -1,18 +1,31 @@
-// function MenuItem({ pizza }) {
-//   const { id, name, unitPrice, ingredients, soldOut, imageUrl } = pizza;
+import PropTypes from "prop-types";
+import { formatCurrency } from "../../utils/helpers";
 
-//   return (
-//     <li>
-//       <img src={imageUrl} alt={name} />
-//       <div>
-//         <p>{name}</p>
-//         <p>{ingredients.join(', ')}</p>
-//         <div>
-//           {!soldOut ? <p>{formatCurrency(unitPrice)}</p> : <p>Sold out</p>}
-//         </div>
-//       </div>
-//     </li>
-//   );
-// }
+function MenuItem({ pizza }) {
+  const { name, unitPrice, ingredients, soldOut, imageUrl } = pizza;
 
-// export default MenuItem;
+  return (
+    <li>
+      <img src={imageUrl} alt={name} />
+      <div>
+        <p>{name}</p>
+        <p>{ingredients.join(", ")}</p>
+        <div>
+          {!soldOut ? <p>{formatCurrency(unitPrice)}</p> : <p>Sold out</p>}
+        </div>
+      </div>
+    </li>
+  );
+}
+
+MenuItem.propTypes = {
+  pizza: PropTypes.shape({
+    name: PropTypes.string.isRequired,
+    unitPrice: PropTypes.number.isRequired,
+    ingredients: PropTypes.arrayOf(PropTypes.string).isRequired,
+    soldOut: PropTypes.bool.isRequired,
+    imageUrl: PropTypes.string.isRequired,
+  }).isRequired,
+};
+
+export default MenuItem;
