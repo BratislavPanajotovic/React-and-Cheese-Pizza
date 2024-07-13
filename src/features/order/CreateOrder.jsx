@@ -1,11 +1,9 @@
 import { useState } from "react";
-import { Form, redirect, useActionData, useNavigation } from "react-router-dom";
-import { createOrder } from "../../services/apiRestaurant";
+import { Form, useActionData, useNavigation } from "react-router-dom";
 import Button from "../../ui/Button";
 import { useDispatch, useSelector } from "react-redux";
-import { clearCart, getCart, getTotalCartPrice } from "../cart/cartSlice";
+import { getCart, getTotalCartPrice } from "../cart/cartSlice";
 import EmptyCart from "../cart/EmptyCart";
-import store from "../user/store";
 import { formatCurrency } from "../../utils/helpers";
 import { fetchAddress } from "../user/userSlice";
 
@@ -116,7 +114,11 @@ function CreateOrder() {
           <input
             type="hidden"
             name="position"
-            value={`${position.latitude},${position.longitude}`}
+            value={
+              position.langitude && position.latitude
+                ? `${position.latitude},${position.longitude}`
+                : ""
+            }
           />
           <Button type="primary" disabled={isSubmitting || isLoadingAddress}>
             {isSubmitting
@@ -132,21 +134,22 @@ function CreateOrder() {
 export async function action({ request }) {
   const formData = await request.formData();
   const data = Object.fromEntries(formData);
-  console.log(data);
   const order = {
     ...data,
     cart: JSON.parse(data.cart),
     priority: data.priority === "true",
   };
 
+  console.log(order);
   const errors = {};
   if (!isValidPhone(order.phone))
     errors.phone =
       "Please give us your correct phone number. We might need it to contact you.";
   if (Object.keys(errors).length > 0) return errors;
-  const newOrder = await createOrder(order);
-  store.dispatch(clearCart());
-  return redirect(`/order/${newOrder.id}`);
+  // const newOrder = await createOrder(order);
+  // store.dispatch(clearCart());
+  // return redirect(`/order/${newOrder.id}`);
+  return null;
 }
 
 export default CreateOrder;

@@ -37,7 +37,7 @@ Button.propTypes = {
   disabled: PropTypes.bool,
   to: PropTypes.string,
   type: PropTypes.string,
-  onClick: PropTypes.func.isRequired,
+  onClick: PropTypes.func,
 };
 
 Button.defaultProps = {

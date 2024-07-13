@@ -23,7 +23,7 @@ function CartItem({ item }) {
   );
 }
 CartItem.propTypes = {
-  item: PropTypes.string,
+  item: PropTypes.object,
   pizzaId: PropTypes.number,
   name: PropTypes.string,
   quantity: PropTypes.number,
