@@ -1,13 +1,14 @@
 import { useState } from "react";
-import { Form, useActionData, useNavigation } from "react-router-dom";
+import { Form, redirect, useActionData, useNavigation } from "react-router-dom";
 import Button from "../../ui/Button";
 import { useDispatch, useSelector } from "react-redux";
-import { getCart, getTotalCartPrice } from "../cart/cartSlice";
+import { clearCart, getCart, getTotalCartPrice } from "../cart/cartSlice";
 import EmptyCart from "../cart/EmptyCart";
 import { formatCurrency } from "../../utils/helpers";
 import { fetchAddress } from "../user/userSlice";
+import { createOrder } from "../../services/apiRestaurant";
+import store from "../user/store";
 
-// https://uibakery.io/regex-library/phone-number
 const isValidPhone = (str) =>
   /^\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}$/.test(
     str,
@@ -146,10 +147,12 @@ export async function action({ request }) {
     errors.phone =
       "Please give us your correct phone number. We might need it to contact you.";
   if (Object.keys(errors).length > 0) return errors;
-  // const newOrder = await createOrder(order);
-  // store.dispatch(clearCart());
-  // return redirect(`/order/${newOrder.id}`);
-  return null;
+
+  const newOrder = await createOrder(order);
+
+  store.dispatch(clearCart());
+
+  return redirect(`/order/${newOrder.id}`);
 }
 
 export default CreateOrder;
